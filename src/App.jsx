@@ -1,48 +1,35 @@
-import React from "react";
-import ProfileCard from "./ProfileCard";
+import { useState } from "react";
 
-function App() {
+export default function CounterApp() {
+  const [count, setCount] = useState(0);
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrement = () => {
+    setCount(count - 1);
+  };
+
   return (
-    <div style={styles.container}>
-      <h1>Team Profiles</h1>
-      <div style={styles.grid}>
-        <ProfileCard
-          name="Abir Maity"
-          title="Frontend Developer"
-          image="https://i.pravatar.cc/150?img=1"
-          description="Passionate about building responsive user interfaces."
-        />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4">Counter App </h1>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={handleDecrement}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+        >
+          − Decrement
+        </button>
 
-        <ProfileCard
-          name="Sara Johnson"
-          title="UI/UX Designer"
-          image="https://i.pravatar.cc/150?img=5"
-          description="Loves crafting intuitive user experiences."
-        />
+        <span className="text-xl font-semibold">{count}</span>
 
-        <ProfileCard
-          name="Alex Carter"
-          title="Backend Engineer"
-          image="https://i.pravatar.cc/150?img=8"
-          description="Enjoys solving complex data problems."
-        />
+        <button
+          onClick={handleIncrement}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+        >
+          + Increment
+        </button>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    textAlign: "center",
-    padding: "20px",
-    backgroundColor: "#f5f5f5",
-    minHeight: "100vh",
-  },
-  grid: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-  },
-};
-
-export default App;
