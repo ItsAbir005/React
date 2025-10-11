@@ -1,59 +1,36 @@
-import { useState } from "react";
-function App() {
-  const [tasks, setTasks] = useState(["Learn React", "Build a project"]);
-  const [newTask, setNewTask] = useState("");
-  const addTask = () => {
-    if (newTask.trim() === "") return;
-    setTasks([...tasks, newTask]);
-    setNewTask("");
-  };
-  const deleteTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index)); 
-  };
+import React, { useState, useEffect } from "react";
+
+export default function WeatherApp() {
+  const [weather, setWeather] = useState(null);
+  const [city, setCity] = useState("London");
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=51.5072&longitude=0.1276&current_weather=true`
+        );
+        const data = await response.json();
+        setWeather(data.current_weather);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
+    fetchWeather();
+  }, []); 
+
   return (
-    <div className="p-6 max-w-md mx-auto text-center">
-      <h1 className="text-2xl font-bold mb-4"> Day 4 - Todo App</h1>
-
-      {/* Input Field */}
-      <div className="flex gap-2 justify-center mb-4">
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Enter a new task..."
-          className="border px-3 py-2 rounded w-2/3"
-        />
-        <button
-          onClick={addTask}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Add
-        </button>
-      </div>
-
-      {/* Conditional Rendering */}
-      {tasks.length > 0 ? (
-        <ul className="text-left">
-          {tasks.map((task, index) => (
-            <li
-              key={index}
-              className="border-b py-2 flex items-center justify-between"
-            >
-              {task}
-              <button
-                onClick={() => deleteTask(index)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+    <div className="p-4 max-w-sm mx-auto text-center border rounded-lg shadow-md">
+      <h1 className="text-xl font-bold mb-2">🌤 Weather App</h1>
+      {weather ? (
+        <div>
+          <p>City: {city}</p>
+          <p>Temperature: {weather.temperature}°C</p>
+          <p>Wind Speed: {weather.windspeed} km/h</p>
+        </div>
       ) : (
-        <p className="text-gray-500 italic">No tasks yet!</p>
+        <p>Loading weather...</p>
       )}
     </div>
   );
 }
-
-export default App;
