@@ -1,51 +1,46 @@
 import React, { useState } from "react";
-export default function App() {
-  const[email,setEmail]=useState("");
-  const[password,setPassword]=useState("");
-  const [error, setError] = useState("");
-  const [remember, setRemember] = useState(false);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError("All fields are required");
-    } else {
-      setError("");
-      // Proceed with form submission or further processing
-      console.log("Form submitted:", { email, password, remember });
-    }
-  };
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-            />
-            Remember Me
-          </label>
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
+      <h2>Todo App</h2>
+      <AddTodo tasks={tasks} setTasks={setTasks} />
+      <TodoList tasks={tasks} />
     </div>
   );
 }
+
+function AddTodo({ tasks, setTasks }) {
+  const [input, setInput] = useState("");
+
+  const handleAdd = () => {
+    if (input.trim() === "") return;
+    setTasks([...tasks, input]);
+    setInput("");
+  };
+
+  return (
+    <div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter task"
+      />
+      <button onClick={handleAdd}>Add</button>
+    </div>
+  );
+}
+
+function TodoList({ tasks }) {
+  return (
+    <ul>
+      {tasks.map((t, i) => (
+        <li key={i}>{t}</li>
+      ))}
+    </ul>
+  );
+}
+
+export default App;
