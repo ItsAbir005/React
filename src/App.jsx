@@ -1,20 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar";
+import Home from "./Home";
+import About from "./About";
 
-function PreviousValue() {
-  const [count, setCount] = useState(0);
-  const prevCount = useRef();
-
-  useEffect(() => {
-    prevCount.current = count; // Store previous count
-  }, [count]);
-
+function App() {
   return (
-    <div>
-      <p>Current: {count}</p>
-      <p>Previous: {prevCount.current}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </>
   );
 }
 
-export default PreviousValue;
+export default App;
