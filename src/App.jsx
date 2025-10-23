@@ -1,20 +1,25 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import BlogLayout from "./components/BlogLayout";
-import BlogList from "./components/BlogList";
-import NewPost from "./components/NewPost";
-import BlogPost from "./components/BlogPost";
+import React, { useContext } from "react";
+import { ThemeContext } from "./ThemeContext";
 
-export default function App() {
+function App() {
+  const { isDark, toggleTheme } = useContext(ThemeContext);
+
+  const appStyle = {
+    backgroundColor: isDark ? "#222" : "#fff",
+    color: isDark ? "#fff" : "#000",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
   return (
-    <Routes>
-      {/* Redirect root to /blog */}
-      <Route path="/" element={<Navigate to="/blog" replace />} />
-
-      <Route path="/blog" element={<BlogLayout />}>
-        <Route index element={<BlogList />} />
-        <Route path="new" element={<NewPost />} />
-        <Route path=":id" element={<BlogPost />} />
-      </Route>
-    </Routes>
+    <div style={appStyle}>
+      <h1>{isDark ? "Dark Mode 🌙" : "Light Mode ☀️"}</h1>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
   );
 }
+
+export default App;
