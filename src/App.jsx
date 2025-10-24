@@ -1,25 +1,17 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "./ThemeContext";
-
+import UserContext from "./context/userContext";
+import ContestProvider from "./context/contextProvider";
+import Login from "./components/login";
+import Profile from "./components/profile";
 function App() {
-  const { isDark, toggleTheme } = useContext(ThemeContext);
-
-  const appStyle = {
-    backgroundColor: isDark ? "#222" : "#fff",
-    color: isDark ? "#fff" : "#000",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-
   return (
-    <div style={appStyle}>
-      <h1>{isDark ? "Dark Mode 🌙" : "Light Mode ☀️"}</h1>
-      <button onClick={toggleTheme}>Toggle Theme</button>
-    </div>
+    <ContestProvider>
+      <div>
+        <h1>User Management App</h1>
+        <Login />
+        <Profile />
+      </div>
+    </ContestProvider>
   );
 }
-
 export default App;
