@@ -1,44 +1,30 @@
-import { use, useEffect,useState} from "react";
-import './App.css';
-import { Provider, useSelector, useDispatch } from "react-redux";
-import { store, addTodo, removeTodo } from "./store";
-function TodoList() {
-  const todos = useSelector((state) => state.todos);
-  const dispatch = useDispatch();
-  const [input, setInput] = useState("");
+import { useSelector, useDispatch } from "react-redux";
+import { addProduct, removeProduct } from "./productSlice";
 
-  const handleAdd = () => {
-    if (input.trim() !== "") {
-      dispatch(addTodo(input));
-      setInput("");
-    }
-  };
-  return (<div className="App">
-      <h1>Todo List</h1>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Enter a todo"
-      />
-      <button onClick={handleAdd}>Add Todo</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            {todo.text}
-            <button onClick={() => dispatch(removeTodo(todo.id))}>
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
+function App() {
+  const products = useSelector((state) => state.products.items);
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <h2>Products List</h2>
+
+      {products.map((p) => (
+        <div key={p.id}>
+          <p>{p.name} - ₹{p.price}</p>
+          <button onClick={() => dispatch(removeProduct(p.id))}>Remove</button>
+        </div>
+      ))}
+
+      <button
+        onClick={() =>
+          dispatch(addProduct({ id: 3, name: "Keyboard", price: 50 }))
+        }
+      >
+        Add Product
+      </button>
     </div>
   );
 }
-export default function App() {
-  return (
-    <Provider store={store}>
-      <TodoList />
-    </Provider>
-  );
-}
+
+export default App;
