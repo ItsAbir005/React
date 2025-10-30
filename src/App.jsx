@@ -1,28 +1,37 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addProduct, removeProduct } from "./productSlice";
+import { addToCart, removeFromCart } from "./cartSlice";
 
 function App() {
-  const products = useSelector((state) => state.products.items);
+  const products = useSelector((state) => state.products.items); 
+  const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
 
   return (
     <div>
-      <h2>Products List</h2>
+      <h2>Products</h2>
 
-      {products.map((p) => (
-        <div key={p.id}>
-          <p>{p.name} - ₹{p.price}</p>
-          <button onClick={() => dispatch(removeProduct(p.id))}>Remove</button>
+      {products.map((product) => (
+        <div key={product.id}>
+          <p>{product.name} - ₹{product.price}</p>
+          <button onClick={() => dispatch(addToCart(product))}>
+            Add to Cart
+          </button>
         </div>
       ))}
 
-      <button
-        onClick={() =>
-          dispatch(addProduct({ id: 3, name: "Keyboard", price: 50 }))
-        }
-      >
-        Add Product
-      </button>
+      <hr />
+      <h2>Cart</h2>
+
+      {cart.map((item) => (
+        <div key={item.id}>
+          <p>
+            {item.name} - Qty: {item.quantity}
+          </p>
+          <button onClick={() => dispatch(removeFromCart(item.id))}>
+            Remove
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
