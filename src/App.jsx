@@ -1,34 +1,30 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart, removeFromCart } from "./cartSlice";
+import { fetchProducts } from "./productSlice";
+import { addToCart } from "./cartSlice";
 
 function App() {
-  const products = useSelector((state) => state.products.items); 
-  const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+
+  const { items, loading, error } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
+  if (loading) return <h3>Loading products...</h3>;
+  if (error) return <h3>{error}</h3>;
 
   return (
     <div>
-      <h2>Products</h2>
+      <h2>Products from API</h2>
 
-      {products.map((product) => (
-        <div key={product.id}>
-          <p>{product.name} - ₹{product.price}</p>
-          <button onClick={() => dispatch(addToCart(product))}>
+      {items.map((p) => (
+        <div key={p.id}>
+          <p>{p.title}</p>
+          <p>₹ {p.price}</p>
+          <button onClick={() => dispatch(addToCart(p))}>
             Add to Cart
-          </button>
-        </div>
-      ))}
-
-      <hr />
-      <h2>Cart</h2>
-
-      {cart.map((item) => (
-        <div key={item.id}>
-          <p>
-            {item.name} - Qty: {item.quantity}
-          </p>
-          <button onClick={() => dispatch(removeFromCart(item.id))}>
-            Remove
           </button>
         </div>
       ))}

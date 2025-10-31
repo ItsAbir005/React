@@ -1,26 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = {
-  items: [
-    { id: 1, name: "Laptop", price: 500 },
-    { id: 2, name: "Phone", price: 300 },
-  ],
-};
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async () => {
+    const response = await fetch("https://fakestoreapi.com/products");
+    const data = await response.json();
+    return data;
+  }
+);
 
 const productSlice = createSlice({
   name: "products",
-  initialState,
-  reducers: {
-    addProduct: (state, action) => {
-      state.items.push(action.payload);
-    },
-    removeProduct: (state, action) => {
-      state.items = state.items.filter(
-        (item) => item.id !== action.payload
-      );
-    },
+  initialState: {
+    items: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to fetch products!";
+      });
   },
 });
 
-export const { addProduct, removeProduct } = productSlice.actions;
 export default productSlice.reducer;
