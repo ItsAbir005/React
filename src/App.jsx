@@ -1,22 +1,38 @@
-import { useState } from "react";
-import TodoItem from "./TodoItem";
+import React, { useMemo, useCallback, useState } from "react";
+import CartItem from "./CartItem"; // memoized child component
 
-export default function TodoList() {
-  const [todos, setTodos] = useState(["Learn React", "Practice useState"]);
-  const [count, setCount] = useState(0); // Unrelated state
+export default function Cart() {
+  const [cart, setCart] = useState([
+    { id: 1, name: "Shoes", price: 1500, quantity: 1 },
+    { id: 2, name: "Tshirt", price: 500, quantity: 2 },
+  ]);
+
+  // ✅ Expensive calculation is memoized
+  const totalPrice = useMemo(() => {
+    console.log("Calculating total...");
+    return cart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+  }, [cart]);
+
+  // ✅ Stable reference of function
+  const handleDelete = useCallback((id) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  }, []);
 
   return (
     <div>
-      <h1>Todo List</h1>
-      <button onClick={() => setCount(count + 1)}>
-        Increase Counter: {count}
-      </button>
+      <h2>Shopping Cart</h2>
+      {cart.map(item => (
+        <CartItem
+          key={item.id}
+          item={item}
+          onDelete={handleDelete}
+        />
+      ))}
 
-      <ul>
-        {todos.map((todo, index) => (
-          <TodoItem key={index} text={todo} />
-        ))}
-      </ul>
+      <h3>Total Price: ₹{totalPrice}</h3>
     </div>
   );
 }
