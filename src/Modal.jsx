@@ -2,13 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 export default function Modal({ children, onClose }) {
-  const portalRoot = document.getElementById("modal-root");
-
-  if (!portalRoot) {
-    console.error("❌ modal-root is missing in index.html");
-    return null;
-  }
-
   return ReactDOM.createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
@@ -21,6 +14,6 @@ export default function Modal({ children, onClose }) {
         {children}
       </div>
     </div>,
-    portalRoot
+    document.getElementById("modal-root")
   );
 }
