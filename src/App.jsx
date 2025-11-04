@@ -1,26 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { Suspense, lazy } from "react";
+import ErrorBoundary from "./ErrorBoundary";
 
-export default function Modal({ children, onClose }) {
-  const portalRoot = document.getElementById("modal-root");
+const WeatherApp = lazy(() => import("./WeatherApp"));
 
-  if (!portalRoot) {
-    console.error("❌ modal-root is missing in index.html");
-    return null;
-  }
-
-  return ReactDOM.createPortal(
-    <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-[90%] max-w-md"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
-    </div>,
-    portalRoot
+function App() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<h2>Loading Weather App...</h2>}>
+        <WeatherApp />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
+
+export default App;
