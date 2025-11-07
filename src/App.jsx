@@ -1,11 +1,10 @@
-import Select from "./Select";
+import withLoader from "./withLoader";
+import UserList from "./UserList";
+
+const UserListWithLoader = withLoader(UserList);
 
 export default function App() {
   return (
-    <Select>
-      <Select.Option value="JavaScript" />
-      <Select.Option value="Python" />
-      <Select.Option value="C++" />
-    </Select>
+    <UserListWithLoader isLoading={false} users={["Abir", "John"]} />
   );
 }
